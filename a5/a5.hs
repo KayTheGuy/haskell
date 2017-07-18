@@ -5,7 +5,6 @@
 -- Assignment 5
 -- ========================================================================================================
 
-
 -- ========================================================================================================
 -- P1) The snoc x lst functions returns a new list that is the same as lst
 --     except x has been added to the end of it
@@ -26,14 +25,13 @@ myappend (first:rest) lst = first : (myappend rest lst)  -- recursively append t
 -- ========================================================================================================
 myreverse :: [a] -> [a]
 myreverse []           = []
-myreverse (first:rest) = snoc first (myreverse rest)    -- using snoc from P1: put first at the end of lit
+myreverse (first:rest) = snoc first (myreverse rest)    -- using snoc from P1: put first at the end of list
 
 -- ========================================================================================================
 -- P4) Write a function called count_emirps n that returns the number of emirps less than, or equal to, n.
 --     An emirp is a prime number that is a different prime when its digits are reversed.
 -- ========================================================================================================
 count_emirps :: Int -> Int
-
 count_emirps n 
               | n < 13                     = 0
               | (is_prime n) && 
@@ -60,17 +58,17 @@ int_to_lst n
 lst_to_int :: [Int] -> Int
 lst_to_int []                               = 0
 lst_to_int (first:rest)
-                        | null rest         = first
-                        | otherwise         = (first * (10 ^ (length rest))) + (lst_to_int rest)
+                       | null rest         = first
+                       | otherwise         = (first * (10 ^ (length rest))) + (lst_to_int rest)
 
 -----------------------------------------------------------------------------------------------------------
 is_prime :: Int -> Bool
 is_prime n
-            | n < 2                       = False
-            | n /= 2 && (n `rem` 2 == 0)  = False        -- skip basic cases for efficiency
-            | n /= 3 && (n `rem` 3 == 0)  = False 
-            | n /= 5 && (n `rem` 5 == 0)  = False 
-            | otherwise                   = check_primality n 2              
+          | n < 2                       = False
+          | n /= 2 && (n `rem` 2 == 0)  = False        -- skip basic cases for efficiency
+          | n /= 3 && (n `rem` 3 == 0)  = False 
+          | n /= 5 && (n `rem` 5 == 0)  = False 
+          | otherwise                   = check_primality n 2              
 
 -----------------------------------------------------------------------------------------------------------
 check_primality :: Int -> Int -> Bool
@@ -87,11 +85,11 @@ biggest_sum :: [[Int]] -> [Int]
 biggest_sum []                      = []
 biggest_sum [el]                    = el
 biggest_sum (first:rest)
-            | head_sum > tail_sum  = first
-            | otherwise            = rest_biggest_sum
-            where head_sum         = sum first
-                  rest_biggest_sum = biggest_sum rest
-                  tail_sum         = sum rest_biggest_sum
+                        | head_sum > tail_sum  = first
+                        | otherwise            = rest_biggest_sum
+                        where head_sum         = sum first
+                              rest_biggest_sum = biggest_sum rest
+                              tail_sum         = sum rest_biggest_sum
 
 -- ========================================================================================================
 -- P6) Write a function called greatest, which returns the item in seq that maximizes function f
@@ -127,6 +125,93 @@ flip_bit x
           | x == 1          = 0
 
 -- ========================================================================================================
--- P9)  Write a function called flip_bit x that returns 1 if x is 0, and 0 if x is 1. If x is not a bit, 
---      then call error msg
+-- P9)  Write a function called is_bit_seq<id> x that returns True if x is the empty list, or if it 
+--     contains only bits (as determined by is_bit). 
 -- ========================================================================================================
+-----------------------------------------------------------------------------------------------------------
+-- a)   Use recursion and guarded commands.
+-----------------------------------------------------------------------------------------------------------
+is_bit_seq1 :: (Eq a, Num a) => [a] -> Bool
+is_bit_seq1 x
+             | null x          = True
+             | is_bit (head x) = is_bit_seq1 (tail x)
+             | otherwise       = False
+
+-----------------------------------------------------------------------------------------------------------
+-- b)   use recursion and at least one if-then-else. No guarded commands.
+-----------------------------------------------------------------------------------------------------------
+is_bit_seq2 :: (Eq a, Num a) => [a] -> Bool
+is_bit_seq2 x = if (null x) then True
+                else if (is_bit (head x)) then is_bit_seq2 (tail x)
+                else False
+
+-----------------------------------------------------------------------------------------------------------
+-- c)   Use the all function in your solution. Don’t use recursion, guarded commands, or if-then-else
+-----------------------------------------------------------------------------------------------------------
+is_bit_seq3 :: (Foldable t, Eq a, Num a) => t a -> Bool
+is_bit_seq3 x = all is_bit x
+
+-- ========================================================================================================
+-- P10)  Write a function called invert_bits<id> x that returns a sequence of bits that is the same as x, 
+--      except 0s become 1s and 1s become 0s
+-- ========================================================================================================
+-----------------------------------------------------------------------------------------------------------
+-- a)  Use basic recursion.
+-----------------------------------------------------------------------------------------------------------
+invert_bits1 :: (Eq a1, Num a1, Num a) => [a1] -> [a]
+invert_bits1 x 
+              | null x         =  []
+              | (head x) == 0  =  myappend [1] (invert_bits1 (tail x)) 
+              | (head x) == 1  =  myappend [0] (invert_bits1 (tail x))
+              | otherwise      =  error "invert_bits1: invalid bit sequence" 
+
+-----------------------------------------------------------------------------------------------------------
+-- b)  Use the map function.
+-----------------------------------------------------------------------------------------------------------
+invert_bits2 :: (Eq a, Num a, Num b) => [a] -> [b]
+invert_bits2 x = map flip_bit x
+
+-----------------------------------------------------------------------------------------------------------
+-- c)  Use the map function.
+-----------------------------------------------------------------------------------------------------------
+invert_bits3 :: (Eq a, Num a, Num t) => [a] -> [t]
+invert_bits3 x = [flip_bit b | b <- x]
+
+-- ========================================================================================================
+-- P11)  Write a function called bit_count x that returns a pair of values indicating the number of 0s 
+--       and 1s in x
+-- ========================================================================================================
+bit_count :: (Eq a, Num t1, Num t, Num a) => [a] -> (t1, t)
+bit_count x 
+           | null x         = (0, 0)
+           | otherwise      = (count_pred (== 0) x, count_pred (== 1) x)
+
+-----------------------------------------------------------------------------------------------------------
+-- Helper function to return the number of elements in list for which the predicate holds
+-----------------------------------------------------------------------------------------------------------
+count_pred :: Num t => (t1 -> Bool) -> [t1] -> t
+count_pred pred lst
+              | null lst          = 0
+              | pred (head lst)   = 1 + count_reset
+              | otherwise         = count_reset
+              where count_reset   = count_pred pred (tail lst)
+
+-- ========================================================================================================
+-- P12)  Write a function called all_bit_seqs n that returns a list of all bit sequences of length n. 
+--       The order of the sequences doesn’t matter. If n is less than 1, then return an empty list
+-- ========================================================================================================
+all_bit_seqs :: (Ord a, Num a, Num t) => a -> [[t]]
+all_bit_seqs n
+              | n < 1     = []
+              | n == 1    = [[0], [1]]
+              | otherwise = myappend
+                            (append_to_elements 0 rest_all_bits_seqs)
+                            (append_to_elements 1 rest_all_bits_seqs)
+              where rest_all_bits_seqs = all_bit_seqs (n - 1)
+
+-----------------------------------------------------------------------------------------------------------
+-- Helper function to append x to all the elements in the list 
+-----------------------------------------------------------------------------------------------------------
+append_to_elements :: t -> [[t]] -> [[t]]
+append_to_elements x [] = []
+append_to_elements x (first:rest) = (myappend [x] first) : (append_to_elements x rest)
