@@ -56,7 +56,7 @@ int_to_lst n
 
 -----------------------------------------------------------------------------------------------------------
 lst_to_int :: [Int] -> Int
-lst_to_int []                               = 0
+lst_to_int []                              = 0
 lst_to_int (first:rest)
                        | null rest         = first
                        | otherwise         = (first * (10 ^ (length rest))) + (lst_to_int rest)
@@ -82,8 +82,8 @@ check_primality n m                             -- check the remainder of n % m 
 --     list with the greatest sum.
 -- ========================================================================================================
 biggest_sum :: [[Int]] -> [Int]
-biggest_sum []                      = []
-biggest_sum [el]                    = el
+biggest_sum []                                 = []
+biggest_sum [el]                               = el
 biggest_sum (first:rest)
                         | head_sum > tail_sum  = first
                         | otherwise            = rest_biggest_sum
@@ -212,6 +212,77 @@ all_bit_seqs n
 -----------------------------------------------------------------------------------------------------------
 -- Helper function to append x to all the elements in the list 
 -----------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
 append_to_elements :: t -> [[t]] -> [[t]]
-append_to_elements x [] = []
+append_to_elements x []           = []
 append_to_elements x (first:rest) = (myappend [x] first) : (append_to_elements x rest)
+
+
+-----------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
+-- Data Structure used for the following problems
+data Bit = Zero | One
+    deriving (Show, Eq)
+-----------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
+
+-- ========================================================================================================
+-- P13)  Implement flipBit :: Bit -> Bit, which changes a Zero to a One, and vice-versa
+-- ========================================================================================================
+flipBit :: Bit -> Bit
+flipBit Zero = One 
+flipBit One  = Zero 
+
+-- ========================================================================================================
+-- P14)  Implement invert :: [Bit] -> [Bit], which flips all the bits in the input list
+-- ========================================================================================================
+invert :: [Bit] -> [Bit]
+invert lst = map flipBit lst
+
+-- ========================================================================================================
+-- P15)  Implement all_bit_seqs n, which returns a list of Bit lists of bit sequences of length n
+-- ========================================================================================================
+all_Bit_seqs :: (Ord a, Num a) => a -> [[Bit]]
+all_Bit_seqs n = map get_bitval_lst $ all_bit_seqs n
+
+-----------------------------------------------------------------------------------------------------------
+-- Helper function to apply the get_bitval to a list of bits
+-----------------------------------------------------------------------------------------------------------
+get_bitval_lst :: [Int] -> [Bit]
+get_bitval_lst lst = map get_bitval lst
+
+-----------------------------------------------------------------------------------------------------------
+-- Helper function to return Bit value of bit
+-----------------------------------------------------------------------------------------------------------
+get_bitval :: Int -> Bit
+get_bitval 0  = Zero
+get_bitval 1  = One
+
+-- ========================================================================================================
+-- P16)  Implement bitSum1, which returns the sum of the bits in the input where Zero is 0, and One is 1
+--       *** No recursion ***
+-- ========================================================================================================
+bitSum1 :: [Bit] -> Int
+bitSum1 lst = sum $ map get_Bitval1 lst
+
+-----------------------------------------------------------------------------------------------------------
+-- Helper function to return the value of Bit
+-----------------------------------------------------------------------------------------------------------
+get_Bitval1 :: Bit -> Int
+get_Bitval1 Zero = 0
+get_Bitval1 One  = 1
+
+-- ========================================================================================================
+-- P17)  Implement bitSum2 :: [Maybe Bit] -> Int, which returns the sum of the maybe-bits in the input, 
+--       i.e. Just Zero is 0, Just One is 1, and Nothing is 0
+-- ========================================================================================================
+bitSum2 :: [Maybe Bit] -> Int
+bitSum2 lst = sum $ map get_Bitval2 lst
+
+-----------------------------------------------------------------------------------------------------------
+-- Helper function to return the value of Bit
+-----------------------------------------------------------------------------------------------------------
+get_Bitval2 :: Maybe Bit -> Int
+get_Bitval2 (Just Zero) = 0
+get_Bitval2 (Just One)  = 1
+get_Bitval2 Nothing     = 0
