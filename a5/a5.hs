@@ -286,3 +286,34 @@ get_Bitval2 :: Maybe Bit -> Int
 get_Bitval2 (Just Zero) = 0
 get_Bitval2 (Just One)  = 1
 get_Bitval2 Nothing     = 0
+
+
+-----------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
+-- Data Structure used for the following problems
+data List a = Empty | Cons a (List a)
+    deriving Show
+-----------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
+
+-- ========================================================================================================
+-- P18)  Implement toList :: [a] -> List a, which converts a regular Haskell list to a List a.
+-- ========================================================================================================
+toList :: [a] -> List a
+toList []           = Empty
+toList (first:rest) = Cons first $ toList rest
+
+-- ========================================================================================================
+-- P19)  Implement toHaskellList :: List a -> [a], which converts a List a to a regular Haskell list
+-- ========================================================================================================
+toHaskellList :: List a -> [a]
+toHaskellList Empty      = []
+toHaskellList (Cons a b) = a : toHaskellList b
+
+-- ========================================================================================================
+-- P20)  Implement append A B, that returns a new List a that consists of the elements of A followed by 
+--       the elements of B. 
+-- ========================================================================================================
+append :: List a -> List a -> List a
+append Empty s_lst      = s_lst
+append (Cons a b) s_lst = Cons a $ append b s_lst
