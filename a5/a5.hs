@@ -50,32 +50,32 @@ reverse_int n = lst_to_int (myreverse (int_to_lst n))
 -----------------------------------------------------------------------------------------------------------
 int_to_lst :: Int -> [Int]
 int_to_lst n 
-            | n < 10         = [n]
-            | otherwise      = myappend (int_to_lst (n `div` 10)) [remainder]  -- e.g: [119] -> [11] + [9]
-            where remainder  = n `rem` 10 
+            | n < 10        = [n]
+            | otherwise     = myappend (int_to_lst (n `div` 10)) [remainder]  -- e.g: [119] -> [11] + [9]
+            where remainder = n `rem` 10 
 
 -----------------------------------------------------------------------------------------------------------
 lst_to_int :: [Int] -> Int
-lst_to_int []                              = 0
+lst_to_int []                      = 0
 lst_to_int (first:rest)
-                       | null rest         = first
-                       | otherwise         = (first * (10 ^ (length rest))) + (lst_to_int rest)
+                       | null rest = first
+                       | otherwise = (first * (10 ^ (length rest))) + (lst_to_int rest)
 
 -----------------------------------------------------------------------------------------------------------
 is_prime :: Int -> Bool
 is_prime n
-          | n < 2                       = False
-          | n /= 2 && (n `rem` 2 == 0)  = False        -- skip basic cases for efficiency
-          | n /= 3 && (n `rem` 3 == 0)  = False 
-          | n /= 5 && (n `rem` 5 == 0)  = False 
-          | otherwise                   = check_primality n 2              
+          | n < 2                      = False
+          | n /= 2 && (n `rem` 2 == 0) = False        -- skip basic cases for efficiency
+          | n /= 3 && (n `rem` 3 == 0) = False 
+          | n /= 5 && (n `rem` 5 == 0) = False 
+          | otherwise                  = check_primality n 2              
 
 -----------------------------------------------------------------------------------------------------------
 check_primality :: Int -> Int -> Bool
 check_primality n m                             -- check the remainder of n % m for: m from 2 to sqrt (n)
-                    | n < (m * m)       = True                  
-                    | (n `rem` m) == 0  = False
-                    | otherwise         = check_primality n (m + 1)
+                    | n < (m * m)      = True                  
+                    | (n `rem` m) == 0 = False
+                    | otherwise        = check_primality n (m + 1)
 
 -- ========================================================================================================
 -- P5) Write a function called biggest_sum that takes a list of integer lists as input, and returns the 
@@ -111,8 +111,8 @@ greatest f (first:rest)
 -- ========================================================================================================
 is_bit :: (Eq a, Num a) => a -> Bool
 is_bit x 
-        | x == 0 || x == 1  = True
-        | otherwise         = False
+        | x == 0 || x == 1 = True
+        | otherwise        = False
 
 -- ========================================================================================================
 -- P8)  Write a function called flip_bit x that returns 1 if x is 0, and 0 if x is 1. If x is not a bit, 
@@ -120,9 +120,9 @@ is_bit x
 -- ========================================================================================================
 flip_bit :: (Eq a, Num a, Num t) => a -> t
 flip_bit x
-          | not (is_bit x)  = error "flip_bit: bit should be 0 or 1"
-          | x == 0          = 1
-          | x == 1          = 0
+          | not (is_bit x) = error "flip_bit: bit should be 0 or 1"
+          | x == 0         = 1
+          | x == 1         = 0
 
 -- ========================================================================================================
 -- P9)  Write a function called is_bit_seq<id> x that returns True if x is the empty list, or if it 
@@ -160,10 +160,10 @@ is_bit_seq3 x = all is_bit x
 -----------------------------------------------------------------------------------------------------------
 invert_bits1 :: (Eq a1, Num a1, Num a) => [a1] -> [a]
 invert_bits1 x 
-              | null x         =  []
-              | (head x) == 0  =  myappend [1] (invert_bits1 (tail x)) 
-              | (head x) == 1  =  myappend [0] (invert_bits1 (tail x))
-              | otherwise      =  error "invert_bits1: invalid bit sequence" 
+              | null x        =  []
+              | (head x) == 0 =  myappend [1] (invert_bits1 (tail x)) 
+              | (head x) == 1 =  myappend [0] (invert_bits1 (tail x))
+              | otherwise     =  error "invert_bits1: invalid bit sequence" 
 
 -----------------------------------------------------------------------------------------------------------
 -- b)  Use the map function.
@@ -183,18 +183,18 @@ invert_bits3 x = [flip_bit b | b <- x]
 -- ========================================================================================================
 bit_count :: (Eq a, Num t1, Num t, Num a) => [a] -> (t1, t)
 bit_count x 
-           | null x         = (0, 0)
-           | otherwise      = (count_pred (== 0) x, count_pred (== 1) x)
+           | null x    = (0, 0)
+           | otherwise = (count_pred (== 0) x, count_pred (== 1) x)
 
 -----------------------------------------------------------------------------------------------------------
 -- Helper function to return the number of elements in list for which the predicate holds
 -----------------------------------------------------------------------------------------------------------
 count_pred :: Num t => (t1 -> Bool) -> [t1] -> t
 count_pred pred lst
-              | null lst          = 0
-              | pred (head lst)   = 1 + count_reset
-              | otherwise         = count_reset
-              where count_reset   = count_pred pred (tail lst)
+              | null lst        = 0
+              | pred (head lst) = 1 + count_reset
+              | otherwise       = count_reset
+              where count_reset = count_pred pred (tail lst)
 
 -- ========================================================================================================
 -- P12)  Write a function called all_bit_seqs n that returns a list of all bit sequences of length n. 
@@ -216,7 +216,6 @@ all_bit_seqs n
 append_to_elements :: t -> [[t]] -> [[t]]
 append_to_elements x []           = []
 append_to_elements x (first:rest) = (myappend [x] first) : (append_to_elements x rest)
-
 
 -----------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------
@@ -255,8 +254,8 @@ get_bitval_lst lst = map get_bitval lst
 -- Helper function to return Bit value of bit
 -----------------------------------------------------------------------------------------------------------
 get_bitval :: Int -> Bit
-get_bitval 0  = Zero
-get_bitval 1  = One
+get_bitval 0 = Zero
+get_bitval 1 = One
 
 -- ========================================================================================================
 -- P16)  Implement bitSum1, which returns the sum of the bits in the input where Zero is 0, and One is 1
@@ -287,7 +286,6 @@ get_Bitval2 (Just Zero) = 0
 get_Bitval2 (Just One)  = 1
 get_Bitval2 Nothing     = 0
 
-
 -----------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------
 -- Data Structure used for the following problems
@@ -317,3 +315,23 @@ toHaskellList (Cons a b) = a : toHaskellList b
 append :: List a -> List a -> List a
 append Empty s_lst      = s_lst
 append (Cons a b) s_lst = Cons a $ append b s_lst
+
+-- ========================================================================================================
+-- P21)  Implement the function removeAll f L that returns a List that is the same as L but all items 
+--       satisfying f have been removed
+-- ========================================================================================================
+removeAll :: (a -> Bool) -> List a -> List a
+removeAll f Empty      = Empty
+removeAll f (Cons a b) = if (f a) then remove_rest
+                         else Cons a remove_rest
+                         where remove_rest = removeAll f b
+
+-- ========================================================================================================
+-- P22)  Implement the function sort L, where L has type List a, that returns a new List a equal to L in 
+--       ascending order
+-- ========================================================================================================
+sort :: Ord a => List a -> List a
+sort Empty = Empty
+sort (Cons a b) = append (append smalls (Cons a Empty)) bigs  -- equivalent to: smalls ++ a ++ bigs
+                  where smalls = removeAll (> a) b            -- remove elements bigger than pivot
+                        bigs   = removeAll (<= a) b           -- remove elements smaller than pivot
