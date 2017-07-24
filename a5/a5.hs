@@ -197,17 +197,17 @@ count_pred pred lst
               where count_reset = count_pred pred (tail lst)
 
 -- ========================================================================================================
--- P12)  Write a function called all_bit_seqs n that returns a list of all bit sequences of length n. 
+-- P12)  Write a function called all_basic_bit_seqs n that returns a list of all bit sequences of length n. 
 --       The order of the sequences doesn’t matter. If n is less than 1, then return an empty list
 -- ========================================================================================================
-all_bit_seqs :: (Ord a, Num a, Num t) => a -> [[t]]
-all_bit_seqs n
+all_basic_bit_seqs :: (Ord a, Num a, Num t) => a -> [[t]]
+all_basic_bit_seqs n
               | n < 1     = []
               | n == 1    = [[0], [1]]
               | otherwise = myappend
                             (append_to_elements 0 rest_all_bits_seqs)
                             (append_to_elements 1 rest_all_bits_seqs)
-              where rest_all_bits_seqs = all_bit_seqs (n - 1)
+              where rest_all_bits_seqs = all_basic_bit_seqs (n - 1)
 
 -----------------------------------------------------------------------------------------------------------
 -- Helper function to append x to all the elements in the list 
@@ -241,8 +241,8 @@ invert lst = map flipBit lst
 -- ========================================================================================================
 -- P15)  Implement all_bit_seqs n, which returns a list of Bit lists of bit sequences of length n
 -- ========================================================================================================
-all_Bit_seqs :: (Ord a, Num a) => a -> [[Bit]]
-all_Bit_seqs n = map get_bitval_lst $ all_bit_seqs n
+all_bit_seqs :: (Ord a, Num a) => a -> [[Bit]]
+all_bit_seqs n = map get_bitval_lst $ all_basic_bit_seqs n
 
 -----------------------------------------------------------------------------------------------------------
 -- Helper function to apply the get_bitval to a list of bits
