@@ -120,9 +120,9 @@ is_bit x
 -- ========================================================================================================
 flip_bit :: (Eq a, Num a, Num t) => a -> t
 flip_bit x
-          | not (is_bit x) = error "flip_bit: bit should be 0 or 1"
-          | x == 0         = 1
-          | x == 1         = 0
+          | x == 0    = 1
+          | x == 1    = 0
+          | otherwise = error "flip_bit: bit should be 0 or 1"
 
 -- ========================================================================================================
 -- P9)  Write a function called is_bit_seq<id> x that returns True if x is the empty list, or if it 
@@ -211,7 +211,6 @@ all_basic_bit_seqs n
 
 -----------------------------------------------------------------------------------------------------------
 -- Helper function to append x to all the elements in the list 
------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------
 append_to_elements :: t -> [[t]] -> [[t]]
 append_to_elements x []           = []
@@ -333,5 +332,5 @@ removeAll f (Cons a b) = if (f a) then remove_rest
 sort :: Ord a => List a -> List a
 sort Empty = Empty
 sort (Cons a b) = append (append smalls (Cons a Empty)) bigs  -- equivalent to: smalls ++ a ++ bigs
-                  where smalls = removeAll (> a) b            -- remove elements bigger than pivot
-                        bigs   = removeAll (<= a) b           -- remove elements smaller than pivot
+                  where smalls = sort (removeAll (>= a) b)            -- remove elements bigger than pivot
+                        bigs   = sort (removeAll (< a) b)           -- remove elements smaller than pivot
